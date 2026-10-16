@@ -67,9 +67,9 @@ public class SSPARRSimulation {
     private static final double EWMA_ALPHA_VERY_HIGH_ERROR = 0.80;
 
     private static final int    STABILITY_WINDOW          = 5;
-    private static final double STABILITY_THRESHOLD       = 0.30;  // CV threshold
+    private static final double STABILITY_THRESHOLD       = 0.50;  // CV threshold — raised to 0.50 so predictive mode activates under GoCJ's high variance (CV ≈ 1.24)
     private static final int    PREDICTION_ERROR_WINDOW   = 5;
-    private static final double MAX_NORM_PREDICTION_ERROR = 0.30;
+    private static final double MAX_NORM_PREDICTION_ERROR = 0.20;  // tighter gate: only use EWMA when prediction error < 20%
 
     private static final double Q_MIN = 0.001;
     private static final double Q_MAX = 60.0;

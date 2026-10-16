@@ -48,9 +48,10 @@ public class MultiGlobalComparisonSimulation {
     private static final double P_IDLE_W = 150.0;
     private static final double P_MAX_W  = 250.0;
 
-    private static final double RR_QUANTUM = 1.0; // 1 second fixed quantum for RR
-    private static final int    RUNS       = 3;   // Runs per workload size for statistical stability
-    private static final int[]  WORKLOADS  = { 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1500, 2000 };
+    private static final double RR_QUANTUM  = 1.0;   // 1 second fixed quantum for RR
+    private static final double CS_OVERHEAD = 0.005; // 5ms context switch penalty per preemption
+    private static final int    RUNS        = 3;     // Runs per workload size for statistical stability
+    private static final int[]  WORKLOADS   = { 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1500, 2000 };
 
     public static void main(String[] args) {
         Locale.setDefault(Locale.US);
@@ -126,7 +127,7 @@ public class MultiGlobalComparisonSimulation {
         System.out.println("=================================================================================================================");
     }
 
-    private static ComprehensiveResult runSimulation(GlobalSchedulers.Policy policy, int workloadSize, boolean isRR) {
+    public static ComprehensiveResult runSimulation(GlobalSchedulers.Policy policy, int workloadSize, boolean isRR) {
         CloudSimPlus simulation = new CloudSimPlus();
 
         List<Host> hostList = new ArrayList<>();
@@ -196,6 +197,8 @@ public class MultiGlobalComparisonSimulation {
                     res.completed++;
                     globalMakespan = Math.max(globalMakespan, t.finishTime);
                 } else {
+                    currentTime += CS_OVERHEAD;
+                    totalCpuBusyTime += CS_OVERHEAD;
                     vq.tasks.addLast(t);
                 }
             }
@@ -257,6 +260,8 @@ public class MultiGlobalComparisonSimulation {
                     history.addLast(actual);
                     while (history.size() > 5) history.removeFirst();
                 } else {
+                    currentTime += CS_OVERHEAD;
+                    totalCpuBusyTime += CS_OVERHEAD;
                     insertSorted(vq.tasks, t);
                 }
             }
@@ -271,6 +276,7 @@ public class MultiGlobalComparisonSimulation {
             res.awtMs = (res.totalAwt / res.completed) * 1000.0;
             res.atatS = res.totalAtat / res.completed;
             res.actS  = res.totalAct / res.completed;
+            res.tctS  = res.totalAct;
         }
         res.makespan = makespan;
         res.throughput = makespan > 0 ? (double) res.completed / makespan : 0.0;
@@ -351,12 +357,12 @@ public class MultiGlobalComparisonSimulation {
 
     public static class ComprehensiveResult {
         public double totalAwt, totalAtat, totalAct;
-        public double awtMs, atatS, actS, makespan, throughput, energyKWh;
+        public double awtMs, atatS, actS, tctS, makespan, throughput, energyKWh;
         public long completed;
 
         public void add(ComprehensiveResult o) {
             totalAwt += o.totalAwt; totalAtat += o.totalAtat; totalAct += o.totalAct;
-            awtMs += o.awtMs; atatS += o.atatS; actS += o.actS;
+            awtMs += o.awtMs; atatS += o.atatS; actS += o.actS; tctS += o.tctS;
             makespan += o.makespan; throughput += o.throughput; energyKWh += o.energyKWh;
             completed += o.completed;
         }
@@ -364,7 +370,7 @@ public class MultiGlobalComparisonSimulation {
         public void divide(int d) {
             if (d <= 0) return;
             totalAwt /= d; totalAtat /= d; totalAct /= d;
-            awtMs /= d; atatS /= d; actS /= d;
+            awtMs /= d; atatS /= d; actS /= d; tctS /= d;
             makespan /= d; throughput /= d; energyKWh /= d;
             completed /= d;
         }

@@ -1,3 +1,12 @@
 target/
 *.class
 results/*.csv
+__pycache__/
+*.pyc
+scratch/
+page_*.png
+test_frames.pdf
+test_twocol.docx
+.vscode/
+MAADRR*.pdf
+

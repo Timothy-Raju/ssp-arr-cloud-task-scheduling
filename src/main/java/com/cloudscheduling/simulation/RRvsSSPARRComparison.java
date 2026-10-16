@@ -12,7 +12,7 @@ import java.util.Locale;
  *   - Same Dynamic Max-Min Global Scheduling Task Assignment
  *
  * Differences (local VM-level tier):
- *   - RR: Classical fixed time quantum with FIFO queue (baseline)
+ *   - RR: Classical fixed time quantum (10.0 s) with FIFO queue (baseline)
  *   - SSP-ARR: Stability-switched, confidence-gated predictive quantum with SRPT ranking
  *
  * Improvement formulas:
@@ -22,7 +22,7 @@ import java.util.Locale;
 public class RRvsSSPARRComparison {
 
     private static final int RUNS = 5;
-    private static final double RR_QUANTUM = 1.0; // 1 second fixed quantum for RR
+    private static final double RR_QUANTUM = 10.0; // 10 second fixed quantum for RR (realistic batch cloud environment)
     private static final int[] PAPER_SIZES = {
         100, 200, 300, 400, 500, 600,
         700, 800, 900, 1000, 1500, 2000
