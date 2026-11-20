@@ -25,7 +25,7 @@ A discrete-event cloud task scheduling research framework implemented on **Cloud
 * **Datacenter Hosts**: 30 Hosts, each with 4 Processing Elements (PEs) @ 4000 MIPS (120 PEs total)
 * **Host Power Profile**: Linear SPECpower model ($P_{\text{idle}} = 150\text{ W}$, $P_{\text{max}} = 250\text{ W}$)
 * **Heterogeneous VMs**: 80 VMs with computing capacities from 1000 to 4000 MIPS
-* **Workload Benchmark**: Real-world Google Cloud Jobs (GoCJ) dataset across 12 scales (100 to 2000 cloudlets)
+* **Workload Benchmark**: Real-world Google Cloud Jobs (GoCJ) dataset across 12 scales (100 to 2000 cloudlets).
 
 ---
 
