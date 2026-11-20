@@ -5,7 +5,7 @@ A discrete-event cloud task scheduling research framework implemented on **Cloud
 ---
 
 ## 🚀 Key Features & Novelty
-
+-
 * **Stability-Switched Dual Mode**: Uses the Coefficient of Variation ($CV = \sigma / \mu$) over recent task completions to dynamically switch between:
   * **Reactive Mode** ($CV \le 0.30$): Safe, queue-median dynamic time quantum.
   * **Predictive Mode** ($CV > 0.30$): Adaptive Exponentially Weighted Moving Average (EWMA) quantuming.
